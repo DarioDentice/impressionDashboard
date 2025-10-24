@@ -1,0 +1,38 @@
+{
+  "name": "backend",
+  "version": "0.0.1",
+  "description": "Server to serve API for access to impressions data , loaded from csv file and set into specific data structures for easy access",
+  "main": "server.ts",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DarioDentice/impressionDashboard.git"
+  },
+  "keywords": [
+    "impressions"
+  ],
+  "author": "DarioDentice",
+  "license": "ISC",
+  "dependencies": {
+    "@fastify/cors": "^11.1.0",
+    "@turf/turf": "^7.2.0",
+    "csv-parser": "^3.2.0",
+    "dotenv": "^17.2.3",
+    "fastify": "^5.6.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.9.1",
+    "@types/supertest": "^6.0.3",
+    "@typescript-eslint/eslint-plugin": "^8.46.2",
+    "@typescript-eslint/parser": "^8.46.2",
+    "eslint": "^9.38.0",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.6.2",
+    "supertest": "^7.1.4",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.3"
+  }
+}
