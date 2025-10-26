@@ -1,14 +1,14 @@
 import {FastifyPluginAsync} from 'fastify';
 import type {
-    RawDataQuery,
-    RawCountryFilter,
-    StatQuery,
+    CountryFilter,
     DeviceStat,
     HourStat,
+    Impression,
+    RawCountryFilter,
+    RawDataQuery,
     StateStat,
-    YearStat,
-    CountryFilter,
-    Impression
+    StatQuery,
+    YearStat
 } from '../types.d.ts';
 
 interface RouteOptions {
@@ -167,6 +167,33 @@ const apiRoutes: FastifyPluginAsync<RouteOptions> = async (fastify, options) => 
             );
         }
     );
+
+    fastify.get<{ Querystring: StatQuery, Reply: any[] }>('/api/stats/by-dow', async (request) => {
+        // Esclude 'not-found' di default
+        const dataToProcess = filterImpressions(allImpressions, request.query.country, false);
+
+        const dowStats = Array(7).fill(0);
+
+        dataToProcess.forEach(imp => {
+            const dow = new Date(imp.timestamp).getUTCDay();
+            dowStats[dow]++;
+        });
+
+        return dowStats.map((impressions, day) => ({day, impressions}));
+    });
+
+    fastify.get<{ Querystring: StatQuery, Reply: any[] }>('/api/stats/by-month', async (request) => {
+        const dataToProcess = filterImpressions(allImpressions, request.query.country, false);
+
+        const monthStats = Array(12).fill(0);
+
+        dataToProcess.forEach(imp => {
+            const month = new Date(imp.timestamp).getUTCMonth();
+            monthStats[month]++;
+        });
+
+        return monthStats.map((impressions, month) => ({month, impressions}));
+    });
 
 };
 
