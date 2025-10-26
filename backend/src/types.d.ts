@@ -7,7 +7,7 @@ export interface StatQuery {
 export type RawCountryFilter = 'all' | 'usa' | 'no-usa' | 'not-found';
 
 export interface RawDataQuery {
-    country?: RawCountryFilter; // Usa il tipo esteso
+    country?: RawCountryFilter;
     page?: string;
     limit?: string;
 }
