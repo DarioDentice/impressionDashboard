@@ -1,10 +1,16 @@
 {
   "name": "backend",
   "version": "0.0.1",
+  "type": "module",
   "description": "Server to serve API for access to impressions data , loaded from csv file and set into specific data structures for easy access",
   "main": "server.ts",
   "scripts": {
-    "test": "test"
+    "test:unit": "vitest run --testPathIgnorePatterns integration",
+    "test:integration": "cross-env NODE_ENV=test vitest run src/__tests__/integration",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "start": "tsx src/server.ts"
   },
   "repository": {
     "type": "git",
@@ -23,16 +29,21 @@
     "fastify": "^5.6.1"
   },
   "devDependencies": {
+    "@eslint/js": "^9.36.0",
     "@types/node": "^24.9.1",
     "@types/supertest": "^6.0.3",
     "@typescript-eslint/eslint-plugin": "^8.46.2",
     "@typescript-eslint/parser": "^8.46.2",
+    "cross-env": "^10.1.0",
     "eslint": "^9.38.0",
     "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
     "prettier": "^3.6.2",
     "supertest": "^7.1.4",
+    "ts-node": "^10.9.2",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3",
+    "typescript-eslint": "^8.45.0",
     "vitest": "^4.0.3"
   }
 }
