@@ -71,7 +71,6 @@ export const mockImpressions: Impression[] = [
         country: 'no-usa',
         state: null
     },
-    // Dati per "ieri"
     {
         device_id: 'a1',
         lat: 34,
@@ -88,7 +87,6 @@ export const mockImpressions: Impression[] = [
         country: 'USA',
         state: 'NY'
     },
-    // Dati per "settimana precedente" (es. 9 giorni fa)
     {
         device_id: 'e1',
         lat: 30,
@@ -98,6 +96,15 @@ export const mockImpressions: Impression[] = [
         state: 'FL'
     },
 ];
+
+export const mockPaginatedImpressions =
+    {
+        totalItems: 11,
+        totalPages: 3,
+        currentPage: 1,
+        data: mockImpressions
+    }
+
 
 export const mockHourStats = [
     {hour: 0, impressions: 5},
@@ -161,3 +168,67 @@ export const mockByMonth = [
     {year: 10, impressions: 255},
     {year: 11, impressions: 175},
 ];
+
+export const mockOverview =
+    [
+        {
+            totalImpressions: 11,
+            dailyChangePercent: 36.36,
+            weeklyChangePercent: 0.0,
+            topDevice: {id: 'a1', impressions: 4},
+        },
+        {
+            totalImpressions: 11,
+            dailyChangePercent: 36.36,
+            weeklyChangePercent: 0.0,
+            topDevice: {id: 'a1', impressions: 4},
+        },
+        {
+            totalImpressions: 11,
+            dailyChangePercent: 36.36,
+            weeklyChangePercent: 0.0,
+            topDevice: {id: 'a1', impressions: 4},
+        },
+        {
+            totalImpressions: 11,
+            dailyChangePercent: 36.36,
+            weeklyChangePercent: 0.0,
+            topDevice: {id: 'a1', impressions: 4},
+        },
+        {
+            totalImpressions: 11,
+            dailyChangePercent: 36.36,
+            weeklyChangePercent: 0.0,
+            topDevice: {id: 'a1', impressions: 4},
+        },
+        {
+            totalImpressions: 11,
+            dailyChangePercent: 36.36,
+            weeklyChangePercent: 0.0,
+            topDevice: {id: 'a1', impressions: 4},
+        },
+        {
+            totalImpressions: 11,
+            dailyChangePercent: 36.36,
+            weeklyChangePercent: 0.0,
+            topDevice: {id: 'a1', impressions: 4},
+        },
+        {
+            totalImpressions: 11,
+            dailyChangePercent: 36.36,
+            weeklyChangePercent: 0.0,
+            topDevice: {id: 'a1', impressions: 4},
+        },
+        {
+            totalImpressions: 11,
+            dailyChangePercent: 36.36,
+            weeklyChangePercent: 0.0,
+            topDevice: {id: 'a1', impressions: 4},
+        },
+        {
+            totalImpressions: 11,
+            dailyChangePercent: 36.36,
+            weeklyChangePercent: 0.0,
+            topDevice: {id: 'a1', impressions: 4},
+        },
+    ];
