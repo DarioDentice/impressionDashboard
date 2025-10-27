@@ -1,6 +1,6 @@
 import { GlobalFilter } from './components/GlobalFilter';
 import { DeviceCharts } from './components/charts/DeviceCharts';
-import { TimeCharts } from './components/charts/TimeCharts';
+import { TimeCharts } from './components/charts/TimeCharts/TimeCharts.tsx';
 import { GeoCharts } from './components/charts/GeoCharts';
 import { BlackFridayChart } from './components/charts/BlackFridayChart';
 
