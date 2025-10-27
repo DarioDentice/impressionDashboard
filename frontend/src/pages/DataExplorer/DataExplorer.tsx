@@ -3,20 +3,20 @@ import {useQuery} from '@tanstack/react-query';
 import {TableWrapper,StyledTable,PaginationControls } from './DataExplorer.style';
 import useFilters from '../../context/FilterContext';
 import {getRawImpressions} from '../../api';
-import type {Impression, PaginatedResponse} from '../../types';
+import type {Impression, PaginatedResponse, Pagination} from '../../types';
 
 const DataExplorer:FC = () => {
     const {country} = useFilters();
-    const [pagination, setPagination] = useState({current: 1, pageSize: 10});
+    const [pagination, setPagination] = useState<Pagination>({current: 1, pageSize: 10});
 
     const {data, isLoading, isError, error} = useQuery<PaginatedResponse>({
         queryKey: ['getImpressions', country, pagination.current, pagination.pageSize],
         queryFn: () => getRawImpressions(country, pagination.current, pagination.pageSize),
-        placeholderData: (previousData) => previousData,
+        placeholderData: (previousData?: PaginatedResponse) => previousData,
     });
 
     const handlePageChange = (newPage: number) => {
-        setPagination(pageInfo => ({...pageInfo, current: newPage}));
+        setPagination((pageInfo: Pagination) => ({...pageInfo, current: newPage}));
     };
 
     if (isError) {

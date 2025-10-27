@@ -1,5 +1,7 @@
 export type CountryFilter = 'all' | 'usa' | 'no-usa';
 
+export type Pagination = { current: number; pageSize: number };
+
 export interface Impression {
     device_id: string;
     lat: number;
