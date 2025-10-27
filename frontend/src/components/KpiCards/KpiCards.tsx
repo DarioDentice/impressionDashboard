@@ -1,10 +1,11 @@
 import {useQuery} from '@tanstack/react-query';
-import {useFilters} from '../../context/FilterContext';
+import useFilters from '../../context/FilterContext';
 import {getKpiData} from '../../api';
-import * as Style from './KpiCards.style';
+import {KpiCard, KpiGrid, KpiPercent, KpiTitle, KpiValue} from './KpiCards.style';
 import type {KpiData} from "../../types";
+import type {FC} from "react";
 
-export function KpiCards() {
+const KpiCards: FC = () => {
     const {country} = useFilters();
     const {data, isLoading, isError} = useQuery<KpiData>({
         queryKey: ['kpiData', country],
@@ -13,18 +14,18 @@ export function KpiCards() {
 
     if (isLoading) {
         return (
-            <Style.KpiGrid>
+            <KpiGrid>
                 {[...Array(4)].map((_, i) => (
-                    <Style.KpiCard key={i} data-loading="true"/>
+                    <KpiCard key={i} data-loading="true"/>
                 ))}
-            </Style.KpiGrid>
+            </KpiGrid>
         );
     }
 
-    if (isError) return <Style.KpiCard>KPI Loading Error.</Style.KpiCard>;
+    if (isError) return <KpiCard>KPI Loading Error.</KpiCard>;
 
     const formatPercent = (val: number | null | undefined): number => {
-        if (val == null ) return 0;
+        if (val == null) return 0;
         return parseFloat(val.toFixed(1));
     };
 
@@ -32,34 +33,36 @@ export function KpiCards() {
     const weeklyChange = formatPercent(data?.weeklyChangePercent);
 
     return (
-        <Style.KpiGrid>
-            <Style.KpiCard>
-                <Style.KpiTitle>Total Impressions</Style.KpiTitle>
-                <Style.KpiValue>{data?.totalImpressions.toLocaleString()}</Style.KpiValue>
-            </Style.KpiCard>
+        <KpiGrid>
+            <KpiCard>
+                <KpiTitle>Total Impressions</KpiTitle>
+                <KpiValue>{data?.totalImpressions.toLocaleString()}</KpiValue>
+            </KpiCard>
 
-            <Style.KpiCard>
-                <Style.KpiTitle>Daily Change</Style.KpiTitle>
-                <Style.KpiValue>
+            <KpiCard>
+                <KpiTitle>Daily Change</KpiTitle>
+                <KpiValue>
                     {dailyChange}%
-                    <Style.KpiPercent $isPositive={dailyChange >= 0}>{Math.abs(dailyChange)}%</Style.KpiPercent>
-                </Style.KpiValue>
-            </Style.KpiCard>
+                    <KpiPercent $isPositive={dailyChange >= 0}>{Math.abs(dailyChange)}%</KpiPercent>
+                </KpiValue>
+            </KpiCard>
 
-            <Style.KpiCard>
-                <Style.KpiTitle>Weekly Change</Style.KpiTitle>
-                <Style.KpiValue>
+            <KpiCard>
+                <KpiTitle>Weekly Change</KpiTitle>
+                <KpiValue>
                     {weeklyChange}%
-                    <Style.KpiPercent $isPositive={weeklyChange >= 0}>{Math.abs(weeklyChange)}%</Style.KpiPercent>
-                </Style.KpiValue>
-            </Style.KpiCard>
+                    <KpiPercent $isPositive={weeklyChange >= 0}>{Math.abs(weeklyChange)}%</KpiPercent>
+                </KpiValue>
+            </KpiCard>
 
-            <Style.KpiCard>
-                <Style.KpiTitle>Top Device</Style.KpiTitle>
-                <Style.KpiValue>
+            <KpiCard>
+                <KpiTitle>Top Device</KpiTitle>
+                <KpiValue>
                     {data?.topDevice?.id || <span className="suffix">N/D</span>}
-                </Style.KpiValue>
-            </Style.KpiCard>
-        </Style.KpiGrid>
+                </KpiValue>
+            </KpiCard>
+        </KpiGrid>
     );
 }
+
+export default KpiCards;

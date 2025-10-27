@@ -1,30 +1,32 @@
-import React from "react";
-import * as Style from './GlobalFilter.style';
-import {useFilters} from '../../../context/FilterContext';
+import type {ChangeEvent, FC} from "react";
+import {FilterLabel,FilterWrapper} from './GlobalFilter.style';
+import useFilters from '../../../context/FilterContext';
 import type {CountryFilter} from '../../../types';
 
-export function GlobalFilter() {
+const GlobalFilter: FC = () => {
     const {country, setCountry} = useFilters();
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setCountry(e.target.value as CountryFilter);
     };
 
     return (
-        <Style.FilterWrapper>
+        <FilterWrapper>
             <strong>Global Filter:</strong>
-            <Style.FilterLabel>
+            <FilterLabel>
                 <input type="radio" value="all" checked={country === 'all'} onChange={handleChange}/>
                 Tutti
-            </Style.FilterLabel>
-            <Style.FilterLabel>
+            </FilterLabel>
+            <FilterLabel>
                 <input type="radio" value="usa" checked={country === 'usa'} onChange={handleChange}/>
                 Solo USA
-            </Style.FilterLabel>
-            <Style.FilterLabel>
+            </FilterLabel>
+            <FilterLabel>
                 <input type="radio" value="no-usa" checked={country === 'no-usa'} onChange={handleChange}/>
                 Non-USA
-            </Style.FilterLabel>
-        </Style.FilterWrapper>
+            </FilterLabel>
+        </FilterWrapper>
     );
 }
+
+export default GlobalFilter;

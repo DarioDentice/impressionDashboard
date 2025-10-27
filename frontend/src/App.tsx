@@ -1,35 +1,35 @@
 import {Routes, Route} from 'react-router-dom';
-import * as Style from './App.style';
-import {GlobalFilter} from './components/layout/GlobalFilter';
-import {MockToggle} from './components/layout/MockToggle';
-import {Dashboard} from './pages/Dashboard';
-import {DeviceDetails} from './pages/DeviceDetails';
-import {TimeDetails} from './pages/TimeDetails';
-import {GeoDetails} from './pages/GeoDetails';
-import {BlackFridayDetails} from './pages/BlackFridayDetails';
-import {DataExplorer} from './pages/DataExplorer';
+import {NavItem, AppContainer, Sidebar, NavMenu, MainContentWrapper, Header, PageContent} from './App.style';
+import GlobalFilter from './components/layout/GlobalFilter';
+import MockToggle from './components/layout/MockToggle';
+import Dashboard from './pages/Dashboard';
+import DeviceDetails from './pages/DeviceDetails';
+import TimeDetails from './pages/TimeDetails';
+import GeoDetails from './pages/GeoDetails';
+import BlackFridayDetails from './pages/BlackFridayDetails';
+import DataExplorer from './pages/DataExplorer';
 
 function App() {
     return (
-        <Style.AppContainer>
-            <Style.Sidebar>
+        <AppContainer>
+            <Sidebar>
                 <div className="logo"/>
-                <Style.NavMenu>
-                    <li><Style.NavItem to="/">Dashboard</Style.NavItem></li>
-                    <li><Style.NavItem to="/devices">Devices</Style.NavItem></li>
-                    <li><Style.NavItem to="/time">Timing Info</Style.NavItem></li>
-                    <li><Style.NavItem to="/geo">Geo Information</Style.NavItem></li>
-                    <li><Style.NavItem to="/black-friday">Black Friday</Style.NavItem></li>
-                    <li><Style.NavItem to="/explorer">Data Exploration</Style.NavItem></li>
-                </Style.NavMenu>
-            </Style.Sidebar>
+                <NavMenu>
+                    <li><NavItem to="/">Dashboard</NavItem></li>
+                    <li><NavItem to="/devices">Devices</NavItem></li>
+                    <li><NavItem to="/time">Timing Info</NavItem></li>
+                    <li><NavItem to="/geo">Geo Information</NavItem></li>
+                    <li><NavItem to="/black-friday">Black Friday</NavItem></li>
+                    <li><NavItem to="/explorer">Data Exploration</NavItem></li>
+                </NavMenu>
+            </Sidebar>
 
-            <Style.MainContentWrapper>
-                <Style.Header>
+            <MainContentWrapper>
+                <Header>
                     <MockToggle/>
                     <GlobalFilter/>
-                </Style.Header>
-                <Style.PageContent>
+                </Header>
+                <PageContent>
                     <Routes>
                         <Route path="/" element={<Dashboard/>}/>
                         <Route path="/devices" element={<DeviceDetails/>}/>
@@ -38,9 +38,9 @@ function App() {
                         <Route path="/black-friday" element={<BlackFridayDetails/>}/>
                         <Route path="/explorer" element={<DataExplorer/>}/>
                     </Routes>
-                </Style.PageContent>
-            </Style.MainContentWrapper>
-        </Style.AppContainer>
+                </PageContent>
+            </MainContentWrapper>
+        </AppContainer>
     );
 }
 

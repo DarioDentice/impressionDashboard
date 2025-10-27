@@ -1,12 +1,12 @@
 import {Line} from 'react-chartjs-2';
-import {useFilters} from '../../../context/FilterContext';
+import useFilters from '../../../context/FilterContext';
 import {getBlackFridayStats} from '../../../api';
 import {useQuery} from '@tanstack/react-query';
 import type {YearStat} from '../../../types';
-import * as Style from './BlackFridayCharts.style.ts';
+import {ChartContainer} from './BlackFridayCharts.style';
 import {SkeletonWrapper} from '../../Card/Card.style';
 
-export function BlackFridayCharts() {
+const BlackFridayCharts = () => {
     const {country} = useFilters();
 
     const {
@@ -40,8 +40,10 @@ export function BlackFridayCharts() {
     };
 
     return (
-        <Style.ChartContainer>
+        <ChartContainer>
             <Line data={chartData} options={{responsive: true, maintainAspectRatio: false}}/>
-        </Style.ChartContainer>
+        </ChartContainer>
     );
 }
+
+export default BlackFridayCharts;

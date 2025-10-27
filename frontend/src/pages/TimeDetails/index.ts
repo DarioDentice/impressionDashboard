@@ -1,1 +1,1 @@
-export * from './TimeDetails'
+export {default} from './TimeDetails'

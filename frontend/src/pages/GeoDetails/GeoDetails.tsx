@@ -1,10 +1,13 @@
-import {Card} from "../../components/Card";
-import {GeoCharts} from "../../components/charts/GeoCharts";
+import Card from "../../components/Card";
+import GeoCharts from "../../components/charts/GeoCharts";
+import type {FC} from "react";
 
-export function GeoDetails() {
+const GeoDetails:FC = () =>  {
     return (
         <Card title="Geographic Analysis (Top 50 US States)">
             <GeoCharts/>
         </Card>
     )
 }
+
+export default GeoDetails;

@@ -1,1 +1,1 @@
-export * from './MockToggle'
+export {default} from './MockToggle'

@@ -1,1 +1,1 @@
-export * from './GeoCharts';
+export {default} from './GeoCharts';

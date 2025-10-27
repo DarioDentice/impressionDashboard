@@ -1,8 +1,8 @@
 import {Line, Bar, Pie} from 'react-chartjs-2';
-import {useFilters} from '../../../context/FilterContext';
+import useFilters from '../../../context/FilterContext';
 import {getHourStats, getDayOfWeekStats, getMonthStats} from '../../../api';
 import {useQuery} from '@tanstack/react-query';
-import * as Style from './TimeCharts.style';
+import {ChartGrid, ChartContainer, ChartWrapper, SectionTitle} from './TimeCharts.style';
 import {SkeletonWrapper} from '../../Card/Card.style';
 
 interface TimeChartsProps {
@@ -15,7 +15,7 @@ const PIE_COLORS = [
     '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#C9CBCF'
 ];
 
-export function TimeCharts({showDetailedView = false}: TimeChartsProps) {
+const TimeCharts = ({showDetailedView = false}: TimeChartsProps) => {
     const {country} = useFilters();
 
     const {
@@ -90,28 +90,30 @@ export function TimeCharts({showDetailedView = false}: TimeChartsProps) {
     };
 
     return (
-        <Style.ChartWrapper>
-            <Style.ChartContainer>
+        <ChartWrapper>
+            <ChartContainer>
                 <Line data={hourChart} options={{responsive: true, maintainAspectRatio: false}}/>
-            </Style.ChartContainer>
+            </ChartContainer>
             {showDetailedView && (
                 <>
-                    <Style.SectionTitle>Day of Week Analysis</Style.SectionTitle>
-                    <Style.ChartGrid>
+                    <SectionTitle>Day of Week Analysis</SectionTitle>
+                    <ChartGrid>
                         <div>
                             <Bar data={dowChartData} options={{responsive: true, maintainAspectRatio: false}}/>
                         </div>
                         <div>
                             <Pie data={dowChartData} options={{responsive: true, maintainAspectRatio: false}}/>
                         </div>
-                    </Style.ChartGrid>
+                    </ChartGrid>
 
-                    <Style.SectionTitle>Monthly Analysis</Style.SectionTitle>
-                    <Style.ChartContainer>
+                    <SectionTitle>Monthly Analysis</SectionTitle>
+                    <ChartContainer>
                         <Bar data={monthChartData} options={{responsive: true, maintainAspectRatio: false}}/>
-                    </Style.ChartContainer>
+                    </ChartContainer>
                 </>
             )}
-        </Style.ChartWrapper>
+        </ChartWrapper>
     );
 }
+
+export default TimeCharts;

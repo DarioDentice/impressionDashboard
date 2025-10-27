@@ -1,12 +1,12 @@
 import {Bar} from 'react-chartjs-2';
-import {useFilters} from '../../../context/FilterContext';
+import useFilters from '../../../context/FilterContext';
 import {getStateStats} from '../../../api';
 import {useQuery} from '@tanstack/react-query';
 import type {StateStat} from '../../../types';
-import * as Style from './GeoCharts.style';
+import {EmptyState,ChartContainer} from './GeoCharts.style';
 import {SkeletonWrapper} from '../../Card/Card.style';
 
-export function GeoCharts() {
+const GeoCharts = () => {
     const {country} = useFilters();
 
     const {
@@ -30,9 +30,9 @@ export function GeoCharts() {
 
     if (country === 'no-usa') {
         return (
-            <Style.EmptyState>
+            <EmptyState>
                 Geo chart shows US data only. (Filter set to 'Non-USA').
-            </Style.EmptyState>
+            </EmptyState>
         );
     }
 
@@ -48,8 +48,10 @@ export function GeoCharts() {
     };
 
     return (
-        <Style.ChartContainer>
+        <ChartContainer>
             <Bar data={chartData} options={{responsive: true, maintainAspectRatio: false}}/>
-        </Style.ChartContainer>
+        </ChartContainer>
     );
 }
+
+export default GeoCharts;

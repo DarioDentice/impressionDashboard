@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from 'react';
-import * as Style from './MockToggle.style';
-import {Switch} from '../../Switch';
+import React, {useState, useEffect, type FC} from 'react';
+import {ToggleWrapper} from './MockToggle.style';
+import Switch from '../../Switch';
 
-export function MockToggle() {
+const MockToggle: FC = () => {
     const [isMocking, setIsMocking] = useState(false);
 
     useEffect(() => {
@@ -25,12 +25,14 @@ export function MockToggle() {
     }
 
     return (
-        <Style.ToggleWrapper title="Reload the page for apply">
+        <ToggleWrapper title="Reload the page for apply">
             <span>API Mock:</span>
             <Switch
                 checked={isMocking}
                 onChange={handleChange}
             />
-        </Style.ToggleWrapper>
+        </ToggleWrapper>
     );
 }
+
+export default MockToggle;

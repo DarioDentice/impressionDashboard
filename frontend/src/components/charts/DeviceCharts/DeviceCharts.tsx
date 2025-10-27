@@ -1,16 +1,16 @@
 import {Bar, Pie} from 'react-chartjs-2';
-import {useFilters} from '../../../context/FilterContext';
+import useFilters from '../../../context/FilterContext';
 import {getDeviceStats} from '../../../api';
 import {useQuery} from '@tanstack/react-query';
 import type {DeviceStat} from '../../../types';
-import * as Style from './DeviceCharts.style';
+import {ChartGrid, ChartContainer} from './DeviceCharts.style';
 import {SkeletonWrapper} from '../../Card/Card.style';
 
 interface DeviceChartsProps {
     showDetailedView?: boolean;
 }
 
-export function DeviceCharts({showDetailedView = false}: DeviceChartsProps) {
+const DeviceCharts = ({showDetailedView = false}: DeviceChartsProps) => {
     const {country} = useFilters();
 
     const {
@@ -52,15 +52,17 @@ export function DeviceCharts({showDetailedView = false}: DeviceChartsProps) {
     };
 
     return (
-        <Style.ChartGrid>
-            <Style.ChartContainer>
+        <ChartGrid>
+            <ChartContainer>
                 <Bar data={chartData} options={{responsive: true, maintainAspectRatio: false}}/>
-            </Style.ChartContainer>
+            </ChartContainer>
             {showDetailedView && (
-                <Style.ChartContainer>
+                <ChartContainer>
                     <Pie data={chartData} options={{responsive: true, maintainAspectRatio: false}}/>
-                </Style.ChartContainer>
+                </ChartContainer>
             )}
-        </Style.ChartGrid>
+        </ChartGrid>
     );
 }
+
+export default DeviceCharts;

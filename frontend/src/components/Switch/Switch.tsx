@@ -1,4 +1,4 @@
-import * as Style from './Switch.style';
+import {SwitchInput,Slider, SwitchLabel} from './Switch.style';
 import * as React from "react";
 
 type SwitchProps = {
@@ -6,15 +6,16 @@ type SwitchProps = {
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-export function Switch({checked, onChange}: SwitchProps) {
+const Switch = ({checked, onChange}: SwitchProps) => {
     return (
-        <Style.SwitchLabel>
-            <Style.SwitchInput
+        <SwitchLabel>
+            <SwitchInput
                 type="checkbox"
                 checked={checked}
                 onChange={onChange}
             />
-            <Style.Slider/>
-        </Style.SwitchLabel>
+            <Slider/>
+        </SwitchLabel>
     );
 }
+export default Switch;

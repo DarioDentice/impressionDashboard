@@ -1,1 +1,1 @@
-export * from './BlackFridayCharts'
+export {default} from './BlackFridayCharts'

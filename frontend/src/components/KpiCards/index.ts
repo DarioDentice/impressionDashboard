@@ -1,1 +1,1 @@
-export * from './KpiCards';
+export {default} from './KpiCards';

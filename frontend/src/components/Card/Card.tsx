@@ -1,20 +1,21 @@
-import React from 'react';
-import * as Style from './Card.style';
+import React,{type FC} from 'react';
+import {CardWrapper,CardBody,CardHeader} from './Card.style';
 
 interface CardProps {
     title: string;
     children: React.ReactNode;
 }
 
-export function Card({title, children}: CardProps) {
+const Card:FC<CardProps> = ({title, children}: CardProps) => {
     return (
-        <Style.CardWrapper>
-            <Style.CardHeader>
+        <CardWrapper>
+            <CardHeader>
                 <h2>{title}</h2>
-            </Style.CardHeader>
-            <Style.CardBody>
+            </CardHeader>
+            <CardBody>
                 {children}
-            </Style.CardBody>
-        </Style.CardWrapper>
+            </CardBody>
+        </CardWrapper>
     );
 }
+export default Card;

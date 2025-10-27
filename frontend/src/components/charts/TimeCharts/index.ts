@@ -1,1 +1,1 @@
-export * from './TimeCharts'
+export {default} from './TimeCharts'

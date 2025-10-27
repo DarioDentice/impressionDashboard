@@ -1,1 +1,1 @@
-export * from './GlobalFilter'
+export {default} from './GlobalFilter'

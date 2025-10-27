@@ -1,1 +1,1 @@
-export * from './GeoDetails'
+export {default} from './GeoDetails'

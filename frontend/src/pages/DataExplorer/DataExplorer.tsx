@@ -1,11 +1,11 @@
-import {useState} from 'react';
+import {type FC, useState} from 'react';
 import {useQuery} from '@tanstack/react-query';
-import * as Style from './DataExplorer.style';
-import {useFilters} from '../../context/FilterContext';
+import {TableWrapper,StyledTable,PaginationControls } from './DataExplorer.style';
+import useFilters from '../../context/FilterContext';
 import {getRawImpressions} from '../../api';
 import type {Impression, PaginatedResponse} from '../../types';
 
-export function DataExplorer() {
+const DataExplorer:FC = () => {
     const {country} = useFilters();
     const [pagination, setPagination] = useState({current: 1, pageSize: 10});
 
@@ -25,8 +25,8 @@ export function DataExplorer() {
 
     return (
         <div>
-            <Style.TableWrapper>
-                <Style.StyledTable>
+            <TableWrapper>
+                <StyledTable>
                     <thead>
                     <tr>
                         <th>Device ID</th>
@@ -52,10 +52,10 @@ export function DataExplorer() {
                         </tr>
                     ))}
                     </tbody>
-                </Style.StyledTable>
-            </Style.TableWrapper>
+                </StyledTable>
+            </TableWrapper>
 
-            <Style.PaginationControls>
+            <PaginationControls>
                 <button
                     onClick={() => handlePageChange(pagination.current - 1)}
                     disabled={pagination.current === 1 || isLoading}
@@ -71,7 +71,9 @@ export function DataExplorer() {
                 >
                     Next
                 </button>
-            </Style.PaginationControls>
+            </PaginationControls>
         </div>
     );
 }
+
+export default DataExplorer;

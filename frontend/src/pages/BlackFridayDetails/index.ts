@@ -1,1 +1,1 @@
-export * from './BlackFridayDetails'
+export {default} from './BlackFridayDetails'

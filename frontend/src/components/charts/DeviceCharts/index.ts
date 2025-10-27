@@ -1,1 +1,1 @@
-export * from "./DeviceCharts";
+export { default } from "./DeviceCharts";
