@@ -1,1 +1,1 @@
-export * from './BlackFridayCharts.tsx'
+export * from './BlackFridayCharts'
