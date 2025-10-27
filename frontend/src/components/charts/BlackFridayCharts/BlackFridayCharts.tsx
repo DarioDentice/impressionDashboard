@@ -28,10 +28,10 @@ const BlackFridayCharts = () => {
     }
 
     const chartData = {
-        labels: data?.map((yearStat) => yearStat.year),
+        labels: data?.map(({year}: YearStat) => year),
         datasets: [{
             label: 'Black Friday Impressions',
-            data: data?.map((yearStat) => yearStat.impressions),
+            data: data?.map(({impressions}: YearStat) => impressions),
             borderColor: 'rgb(255, 159, 64)',
             backgroundColor: 'rgba(255, 159, 64, 0.2)',
             fill: true,

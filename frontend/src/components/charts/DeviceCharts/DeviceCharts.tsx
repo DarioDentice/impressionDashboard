@@ -34,10 +34,10 @@ const DeviceCharts = ({showDetailedView = false}: DeviceChartsProps) => {
     const topData = data?.slice(0, 10) || [];
 
     const chartData = {
-        labels: topData.map((deviceStat) => deviceStat.device_id),
+        labels: topData.map(({device_id}: DeviceStat) => device_id),
         datasets: [{
             label: 'Impressions',
-            data: topData.map((deviceStat) => deviceStat.impressions),
+            data: topData.map(({impressions}: DeviceStat) => impressions),
             backgroundColor: [
                 'rgba(255, 99, 132, 0.6)',
                 'rgba(54, 162, 235, 0.6)',

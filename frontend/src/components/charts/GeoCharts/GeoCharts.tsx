@@ -39,10 +39,10 @@ const GeoCharts = () => {
     const topStates = data?.slice(0, 15) || [];
 
     const chartData = {
-        labels: topStates.map((stateStat) => stateStat.state),
+        labels: topStates.map(({state}: StateStat) => state),
         datasets: [{
             label: 'Impressions',
-            data: topStates.map((stateStat) => stateStat.impressions),
+            data: topStates.map(({impressions}: StateStat) => impressions),
             backgroundColor: 'rgba(153, 102, 255, 0.6)',
         }],
     };
