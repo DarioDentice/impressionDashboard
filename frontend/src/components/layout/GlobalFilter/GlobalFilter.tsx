@@ -1,5 +1,7 @@
-import {useFilters} from '../context/FilterContext';
-import type {CountryFilter} from '../types';
+import React from "react";
+import * as Style from './GlobalFilter.style';
+import {useFilters} from '../../../context/FilterContext';
+import type {CountryFilter} from '../../../types';
 
 export function GlobalFilter() {
     const {country, setCountry} = useFilters();
@@ -9,20 +11,20 @@ export function GlobalFilter() {
     };
 
     return (
-        <div style={{margin: '20px 0'}}>
-            <h3>Filtro Globale</h3>
-            <label>
+        <Style.FilterWrapper>
+            <strong>Global Filter:</strong>
+            <Style.FilterLabel>
                 <input type="radio" value="all" checked={country === 'all'} onChange={handleChange}/>
                 Tutti
-            </label>
-            <label style={{marginLeft: '10px'}}>
+            </Style.FilterLabel>
+            <Style.FilterLabel>
                 <input type="radio" value="usa" checked={country === 'usa'} onChange={handleChange}/>
                 Solo USA
-            </label>
-            <label style={{marginLeft: '10px'}}>
+            </Style.FilterLabel>
+            <Style.FilterLabel>
                 <input type="radio" value="no-usa" checked={country === 'no-usa'} onChange={handleChange}/>
                 Non-USA
-            </label>
-        </div>
+            </Style.FilterLabel>
+        </Style.FilterWrapper>
     );
 }
