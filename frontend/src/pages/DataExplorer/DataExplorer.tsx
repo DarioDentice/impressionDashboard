@@ -1,0 +1,80 @@
+import {type FC, useState} from 'react';
+import {useQuery} from '@tanstack/react-query';
+import {TableWrapper, StyledTable, PaginationControls} from './DataExplorer.style';
+import {useFilters} from '../../context';
+import {getRawImpressions} from '../../api';
+import type {Impression, PaginatedResponse, Pagination} from '../../types';
+import {ErrorMessage} from "../../components/ErrorMessage/ErrorMessage.tsx";
+
+const DataExplorer: FC = () => {
+    const {country} = useFilters();
+    const [pagination, setPagination] = useState<Pagination>({current: 1, pageSize: 10});
+
+    const {data, isLoading, isError, error} = useQuery<PaginatedResponse>({
+        queryKey: ['getImpressions', country, pagination.current, pagination.pageSize],
+        queryFn: () => getRawImpressions(country, pagination.current, pagination.pageSize),
+        placeholderData: (previousData?: PaginatedResponse) => previousData,
+    });
+
+    const handlePageChange = (newPage: number) => {
+        setPagination((pageInfo: Pagination) => ({...pageInfo, current: newPage}));
+    };
+
+    if (isError) {
+        return <ErrorMessage message={'Loading Error:'} details={[error.message]}/>;
+    }
+
+    return (
+        <div>
+            <TableWrapper>
+                <StyledTable>
+                    <thead>
+                    <tr>
+                        <th>Device ID</th>
+                        <th>Timestamp</th>
+                        <th>Country</th>
+                        <th>State (USA)</th>
+                        <th>Lat/Lng</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {isLoading && (
+                        <tr>
+                            <td colSpan={5} className="loading-cell">Loading...</td>
+                        </tr>
+                    )}
+                    {!isLoading && data?.data.map((impression: Impression) => (
+                        <tr key={impression.timestamp}>
+                            <td>{impression.device_id}</td>
+                            <td>{new Date(impression.timestamp).toLocaleString()}</td>
+                            <td>{impression.country}</td>
+                            <td>{impression.state || 'N/A'}</td>
+                            <td>{impression.lat.toFixed(4)}, {impression.lng.toFixed(4)}</td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </StyledTable>
+            </TableWrapper>
+
+            <PaginationControls>
+                <button
+                    onClick={() => handlePageChange(pagination.current - 1)}
+                    disabled={pagination.current === 1 || isLoading}
+                >
+                    Previous
+                </button>
+                <span>
+                    Page {pagination.current} of {data?.totalPages || 1}
+                </span>
+                <button
+                    onClick={() => handlePageChange(pagination.current + 1)}
+                    disabled={pagination.current === (data?.totalPages || 1) || isLoading}
+                >
+                    Next
+                </button>
+            </PaginationControls>
+        </div>
+    );
+}
+
+export default DataExplorer;
