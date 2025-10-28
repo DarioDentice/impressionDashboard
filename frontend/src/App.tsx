@@ -8,12 +8,13 @@ import TimeDetails from './pages/TimeDetails';
 import GeoDetails from './pages/GeoDetails';
 import BlackFridayDetails from './pages/BlackFridayDetails';
 import DataExplorer from './pages/DataExplorer';
+import logo from './asserts/logo.webp'
 
 function App() {
     return (
         <AppContainer>
             <Sidebar>
-                <div className="logo"/>
+                <div className="logo"><img src={logo} height='30px' width='150px'  alt='companyLogos'/> </div>
                 <NavMenu>
                     <li><NavItem to="/">Dashboard</NavItem></li>
                     <li><NavItem to="/devices">Devices</NavItem></li>
