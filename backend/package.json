@@ -5,12 +5,15 @@
   "description": "Server to serve API for access to impressions data , loaded from csv file and set into specific data structures for easy access",
   "main": "server.ts",
   "scripts": {
-    "test:unit": "vitest run --testPathIgnorePatterns integration",
     "test:integration": "cross-env NODE_ENV=test vitest run src/__tests__/integration",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "format": "prettier --write \"src/**/*.ts\"",
     "start": "tsx src/server.ts"
+  },
+  "engines": {
+    "node": "v22.19.0",
+    "npm": "10.9.3"
   },
   "repository": {
     "type": "git",

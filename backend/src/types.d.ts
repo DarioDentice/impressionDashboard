@@ -16,12 +16,10 @@ export interface Impression {
     device_id: string;
     lat: number;
     lng: number;
-    timestamp: number; // In millisecondi
+    timestamp: number;
     country: 'usa' | 'no-usa' | 'not-found';
     state: string | null;
 }
-
-// Tipi per i risultati aggregati
 
 export interface DeviceStat {
     device_id: string;
@@ -41,4 +39,11 @@ export interface StateStat {
 export interface YearStat {
     year: number;
     impressions: number;
+}
+
+export interface KpiData {
+    totalImpressions: number;
+    dailyChangePercent: number | null;
+    weeklyChangePercent: number | null;
+    topDevice: { id: string; impressions: number } | null;
 }

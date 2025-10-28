@@ -25,17 +25,17 @@ export async function startServer(): Promise<FastifyInstance> {
         const allImpressions = await loadData();
         const server = createServer(allImpressions);
         if (!isTest) {
-            console.log('[Server Start] Avvio server.listen() (Modalità Produzione)');
+            console.log('[Server Start]');
             await server.listen({port: PORT, host: '0.0.0.0'});
-            console.log(`Server Fastify in esecuzione su http://localhost:${PORT}`);
+            console.log(`Fastify server running on http://localhost:${PORT}`);
         } else {
-            console.log('[Server Start] Avvio server.ready()');
+            console.log('[Server Test Start]');
             await server.ready();
         }
         return server;
     } catch (err) {
         if (!isTest) {
-            console.error('ERRORE FATALE: Impossibile caricare i dati.', err);
+            console.error('FATAL ERROR: Unable to load data.', err);
             process.exit(1);
         }
         throw err;
