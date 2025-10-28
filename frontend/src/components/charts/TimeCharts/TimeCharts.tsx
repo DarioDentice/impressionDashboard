@@ -1,9 +1,10 @@
 import {Line, Bar, Pie} from 'react-chartjs-2';
-import useFilters from '../../../context/FilterContext';
+import {useFilters} from '../../../context';
 import {getHourStats, getDayOfWeekStats, getMonthStats} from '../../../api';
 import {useQuery} from '@tanstack/react-query';
 import {ChartGrid, ChartContainer, ChartWrapper, SectionTitle} from './TimeCharts.style';
 import {SkeletonWrapper} from '../../Card/Card.style';
+import {ErrorMessage} from "../../ErrorMessage/ErrorMessage.tsx";
 
 interface TimeChartsProps {
     showDetailedView?: boolean;
@@ -56,14 +57,17 @@ const TimeCharts = ({showDetailedView = false}: TimeChartsProps) => {
         return <SkeletonWrapper/>;
     }
 
-    if (isErrorHours) return <p style={{color: 'red'}}>Error loading hour data: {(errorHours as Error).message}</p>;
-    if (isErrorDow) return <p style={{color: 'red'}}>Error loading DOW data: {(errorDow as Error).message}</p>;
-    if (isErrorMonth) return <p style={{color: 'red'}}>Error loading month data: {(errorMonth as Error).message}</p>;
+    if (isErrorHours) return <ErrorMessage message={'Error loading hour data:'}
+                                           details={[(errorHours as Error).message]}/>;
+    if (isErrorDow) return <ErrorMessage message={'Error loading DOW data:'} details={[(errorDow as Error).message]}/>;
+    if (isErrorMonth) return <ErrorMessage message={'Error loading month data:'}
+                                           details={[(errorMonth as Error).message]}/>;
+
 
     const hourChart = {
         labels: hourData?.map((hourStat) => `${hourStat.hour}:00`),
         datasets: [{
-            label: 'Impressions per Hour', // Tradotto
+            label: 'Impressions per Hour',
             data: hourData?.map((hourStat) => hourStat.impressions),
             borderColor: 'rgb(255, 99, 132)',
             backgroundColor: 'rgba(255, 99, 132, 0.2)',
