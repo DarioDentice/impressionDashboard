@@ -8,7 +8,7 @@ type CardProps = PropsWithChildren<{
 const Card: FC<CardProps> = ({title, children}) => {
     return (
         <CardWrapper>
-            <CardHeader>{title}</CardHeader>
+            <CardHeader><h2>{title}</h2></CardHeader>
             <CardBody>{children}</CardBody>
         </CardWrapper>
     )
