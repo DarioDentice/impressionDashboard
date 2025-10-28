@@ -5,6 +5,7 @@ import {useQuery} from '@tanstack/react-query';
 import type {DeviceStat} from '../../../types';
 import {ChartGrid, ChartContainer} from './DeviceCharts.style';
 import {SkeletonWrapper} from '../../Card/Card.style';
+import {ErrorMessage} from "../../ErrorMessage/ErrorMessage.tsx";
 
 interface DeviceChartsProps {
     showDetailedView?: boolean;
@@ -28,7 +29,7 @@ const DeviceCharts = ({showDetailedView = false}: DeviceChartsProps) => {
     }
 
     if (isError) {
-        return <p style={{color: 'red'}}>Error loading device data: {(error as Error).message}</p>;
+        return <ErrorMessage message={'Error loading device data:'} details={[(error as Error).message]} />;
     }
 
     const topData = data?.slice(0, showDetailedView? 15 : 10) || [];

@@ -5,6 +5,7 @@ import {useQuery} from '@tanstack/react-query';
 import type {YearStat} from '../../../types';
 import {ChartContainer} from './BlackFridayCharts.style';
 import {SkeletonWrapper} from '../../Card/Card.style';
+import {ErrorMessage} from "../../ErrorMessage/ErrorMessage.tsx";
 
 const BlackFridayCharts = () => {
     const {country} = useFilters();
@@ -24,7 +25,7 @@ const BlackFridayCharts = () => {
     }
 
     if (isError) {
-        return <p style={{color: 'red'}}>Error loading Black Friday data: {(error as Error).message}</p>;
+        return <ErrorMessage message={'Error loading Black Friday data:'} details={[(error as Error).message]} />;
     }
 
     const chartData = {

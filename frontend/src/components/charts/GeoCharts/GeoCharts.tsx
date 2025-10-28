@@ -5,6 +5,7 @@ import {useQuery} from '@tanstack/react-query';
 import type {StateStat} from '../../../types';
 import {EmptyState,ChartContainer} from './GeoCharts.style';
 import {SkeletonWrapper} from '../../Card/Card.style';
+import {ErrorMessage} from "../../ErrorMessage/ErrorMessage.tsx";
 
 const GeoCharts = () => {
     const {country} = useFilters();
@@ -25,7 +26,7 @@ const GeoCharts = () => {
     }
 
     if (isError) {
-        return <p style={{color: 'red'}}>Error loading state data: {(error as Error).message}</p>;
+        return <ErrorMessage message={'Error loading state data: '} details={[(error as Error).message]} />;
     }
 
     if (country === 'no-usa') {
