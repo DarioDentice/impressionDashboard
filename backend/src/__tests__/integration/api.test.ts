@@ -142,7 +142,7 @@ describe('GET /api/stats/black-friday', () => {
 
     // =========================================================================
 
-    describe('GET /api/kpi/overview', () => {
+    describe('GET /api/stats/kpi', () => {
 
         const MOCK_DATE = '2024-01-03T10:00:00.000Z';
 
@@ -157,7 +157,7 @@ describe('GET /api/stats/black-friday', () => {
 
         it('should return correct KPI calculations based on mocked time', async () => {
 
-            const response = await api.get('/api/kpi/overview?country=all').expect(200);
+            const response = await api.get('/api/stats/kpi?country=all').expect(200);
             expect(response.body.totalImpressions).toBe(9);
             expect(response.body.dailyChangePercent).toBe(100);
             expect(response.body.weeklyChangePercent).toBe(150);
@@ -168,7 +168,7 @@ describe('GET /api/stats/black-friday', () => {
 
         it('should return correct KPIs for USA filter', async () => {
 
-            const response = await api.get('/api/kpi/overview?country=usa').expect(200);
+            const response = await api.get('/api/stats/kpi?country=usa').expect(200);
 
             expect(response.body.totalImpressions).toBe(6);
             expect(response.body.dailyChangePercent).toBe(0);

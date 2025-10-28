@@ -185,7 +185,7 @@ const apiRoutes: FastifyPluginAsync<RouteOptions> = async (fastify, options) => 
     });
 
     // EXTRA - create a response with kpi stats
-    fastify.get<{ Querystring: StatQuery, Reply: KpiData }>('/api/kpi/overview', async (request) => {
+    fastify.get<{ Querystring: StatQuery, Reply: KpiData }>('/api/stats/kpi', async (request) => {
 
         const cleanData = filterImpressions(allImpressions, request.query.country, false);
 
