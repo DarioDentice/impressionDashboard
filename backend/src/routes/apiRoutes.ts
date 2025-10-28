@@ -9,7 +9,8 @@ import type {
     StateStat,
     StatQuery,
     YearStat,
-    KpiData
+    KpiData,
+    SortKeys
 } from '../types.d.ts';
 
 interface RouteOptions {
@@ -57,12 +58,30 @@ const apiRoutes: FastifyPluginAsync<RouteOptions> = async (fastify, options) => 
 
     fastify.get<{ Querystring: RawDataQuery }>('/api/impressions',
         async (request) => {
-            const {country, page, limit} = request.query;
+            const { country, page, limit, sortBy, sortOrder } = request.query;
 
             const pageNum = parseInt(page || '1', 10);
             const limitNum = parseInt(limit || '100', 10);
 
             const filteredData = filterImpressions(allImpressions, country, true);
+
+            if (sortBy && sortOrder) {
+                const key = sortBy as SortKeys;
+
+                filteredData.sort((elemA, elemB) => {
+                    const impressionA = elemA[key];
+                    const impressionB = elemB[key];
+                    if (impressionA === null) return 1;
+                    if (impressionB === null) return -1;
+                    let compare = 0;
+                    if (typeof impressionA === 'number' && typeof impressionB === 'number') {
+                        compare = impressionA - impressionB;
+                    } else if (typeof impressionA === 'string' && typeof impressionB === 'string') {
+                        compare = impressionA.localeCompare(impressionB);
+                    }
+                    return sortOrder === 'asc' ? compare : -compare;
+                });
+            }
 
             const startIndex = (pageNum - 1) * limitNum;
             const endIndex = pageNum * limitNum;
@@ -158,7 +177,7 @@ const apiRoutes: FastifyPluginAsync<RouteOptions> = async (fastify, options) => 
     );
 
     fastify.get<{ Querystring: StatQuery, Reply: any[] }>('/api/stats/by-dow', async (request) => {
-        // Esclude 'not-found' di default
+
         const dataToProcess = filterImpressions(allImpressions, request.query.country, false);
 
         const dowStats = Array(7).fill(0);

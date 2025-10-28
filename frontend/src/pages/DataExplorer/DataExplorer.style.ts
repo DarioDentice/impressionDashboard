@@ -29,7 +29,29 @@ export const StyledTable = styled.table`
         color: #8c8c8c;
         height: 200px;
     }
+    thead th {
+        background: #fafafa;
+        font-weight: 600;
+        white-space: nowrap;
+        &.sortable {
+            cursor: pointer;
+            user-select: none;
+            &:hover {
+                background: #f0f0f0;
+            }
+        }
+        .sort-arrow {
+            margin-left: 8px;
+            opacity: 0.3;
+        }
+        &.asc .sort-arrow.asc,
+        &.desc .sort-arrow.desc {
+            opacity: 1;
+            color: #1890ff; /* Blu */
+        }
+    }
 `;
+
 
 export const PaginationControls = styled.div`
     display: flex;

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type {PaginatedResponse,CountryFilter, DeviceStat, TimeStat, StateStat, YearStat,KpiData} from '../types';
+import type {PaginatedResponse,CountryFilter, DeviceStat, TimeStat, StateStat, YearStat,KpiData ,SortKeys} from '../types';
 
 const api = axios.create({
     baseURL: 'http://localhost:3001/api',
@@ -15,13 +15,17 @@ async function fetchStats<T>(endpoint: string, country: CountryFilter): Promise<
 export const getRawImpressions = async (
     country: CountryFilter,
     page: number,
-    limit: number
+    limit: number,
+    sortBy?: SortKeys,
+    sortOrder?: 'asc' | 'desc'
 ): Promise<PaginatedResponse> => {
     const response = await api.get<PaginatedResponse>('/impressions', {
         params: {
             country,
             page,
             limit,
+            sortBy,
+            sortOrder,
         },
     });
     return response.data;

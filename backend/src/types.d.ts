@@ -6,10 +6,14 @@ export interface StatQuery {
 
 export type RawCountryFilter = 'all' | 'usa' | 'no-usa' | 'not-found';
 
+export type SortKeys = keyof Impression;
+
 export interface RawDataQuery {
     country?: RawCountryFilter;
     page?: string;
     limit?: string;
+    sortBy?: SortKeys;
+    sortOrder?: 'asc' | 'desc';
 }
 
 export interface Impression {
