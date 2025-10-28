@@ -1,11 +1,12 @@
 import {type FC, useState} from 'react';
 import {useQuery} from '@tanstack/react-query';
-import {TableWrapper,StyledTable,PaginationControls } from './DataExplorer.style';
+import {TableWrapper, StyledTable, PaginationControls} from './DataExplorer.style';
 import {useFilters} from '../../context';
 import {getRawImpressions} from '../../api';
 import type {Impression, PaginatedResponse, Pagination} from '../../types';
+import {ErrorMessage} from "../../components/ErrorMessage/ErrorMessage.tsx";
 
-const DataExplorer:FC = () => {
+const DataExplorer: FC = () => {
     const {country} = useFilters();
     const [pagination, setPagination] = useState<Pagination>({current: 1, pageSize: 10});
 
@@ -20,7 +21,7 @@ const DataExplorer:FC = () => {
     };
 
     if (isError) {
-        return <div>Loading Error: {error.message}</div>;
+        return <ErrorMessage message={'Loading Error:'} details={[error.message]}/>;
     }
 
     return (
