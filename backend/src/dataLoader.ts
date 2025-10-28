@@ -9,7 +9,6 @@ const MAP_FILE_PATH = path.join(process.cwd(), './src/data/map.json');
 
 const mapFeatures = JSON.parse(fs.readFileSync(MAP_FILE_PATH, 'utf-8')).features;
 
-// Funzione helper per determinare lo stato USA
 function getGeoData(
     lat: string,
     lng: string
@@ -17,7 +16,7 @@ function getGeoData(
     const parsedLat = parseFloat(lat);
     const parsedLng = parseFloat(lng);
     if (isNaN(parsedLat) || isNaN(parsedLng)) {
-        console.warn(`getGeoData: Coordinate non valide rilevate (Lat: ${lat}, Lng: ${lng}).`);
+        console.warn(`getGeoData: invalid coordinates detected (Lat: ${lat}, Lng: ${lng}).`);
         return {country: 'not-found', state: null};
     }
     try {
@@ -28,18 +27,18 @@ function getGeoData(
             }
         }
     } catch (e) {
-        return {country: 'not-found', state: null}; // Non trovato
+        return {country: 'not-found', state: null};
     }
-    return {country: 'no-usa', state: null}; // Non trovato negli USA
+    return {country: 'no-usa', state: null};
 }
 
 /**
- * Carica e processa il CSV in memoria.
- * @returns Promise che si risolve con l'array completo di impression.
+ * Loads and processes the CSV in memory.
+ * @returns A promise that resolves to the full impression array.
  */
 export function loadData(): Promise<Impression[]> {
     return new Promise((resolve, reject) => {
-        console.log('Avvio caricamento CSV in memoria...');
+        console.log('Starting CSV loading into memory...');
         const results: Impression[] = [];
 
         fs.createReadStream(CSV_FILE_PATH)
@@ -57,11 +56,11 @@ export function loadData(): Promise<Impression[]> {
                 });
             })
             .on('end', () => {
-                console.log(`Dati caricati: ${results.length} impressioni in RAM.`);
+                console.log(`Data uploaded: ${results.length} impressions on Memory.`);
                 resolve(results);
             })
             .on('error', (error) => {
-                console.error('Errore durante la lettura del CSV:', error);
+                console.error('Error reading CSV:', error);
                 reject(error);
             });
     });
