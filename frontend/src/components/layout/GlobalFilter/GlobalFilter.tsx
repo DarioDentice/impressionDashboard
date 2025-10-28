@@ -1,6 +1,6 @@
 import type {ChangeEvent, FC} from "react";
-import {FilterLabel,FilterWrapper} from './GlobalFilter.style';
-import useFilters from '../../../context/FilterContext';
+import {FilterLabel, FilterWrapper} from './GlobalFilter.style';
+import {useFilters} from '../../../context';
 import type {CountryFilter} from '../../../types';
 
 const GlobalFilter: FC = () => {

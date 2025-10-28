@@ -1,7 +1,7 @@
 import {type FC, useState} from 'react';
 import {useQuery} from '@tanstack/react-query';
 import {TableWrapper,StyledTable,PaginationControls } from './DataExplorer.style';
-import useFilters from '../../context/FilterContext';
+import {useFilters} from '../../context';
 import {getRawImpressions} from '../../api';
 import type {Impression, PaginatedResponse, Pagination} from '../../types';
 

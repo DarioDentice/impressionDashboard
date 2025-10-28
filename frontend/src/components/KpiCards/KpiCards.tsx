@@ -1,5 +1,5 @@
 import {useQuery} from '@tanstack/react-query';
-import useFilters from '../../context/FilterContext';
+import {useFilters} from '../../context';
 import {getKpiData} from '../../api';
 import {KpiCard, KpiGrid, KpiPercent, KpiTitle, KpiValue} from './KpiCards.style';
 import type {KpiData} from "../../types";

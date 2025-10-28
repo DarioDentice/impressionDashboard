@@ -1,5 +1,5 @@
 import {Bar, Pie} from 'react-chartjs-2';
-import useFilters from '../../../context/FilterContext';
+import {useFilters} from '../../../context';
 import {getDeviceStats} from '../../../api';
 import {useQuery} from '@tanstack/react-query';
 import type {DeviceStat} from '../../../types';
@@ -31,7 +31,7 @@ const DeviceCharts = ({showDetailedView = false}: DeviceChartsProps) => {
         return <p style={{color: 'red'}}>Error loading device data: {(error as Error).message}</p>;
     }
 
-    const topData = data?.slice(0, 10) || [];
+    const topData = data?.slice(0, showDetailedView? 15 : 10) || [];
 
     const chartData = {
         labels: topData.map(({device_id}: DeviceStat) => device_id),

@@ -1,5 +1,5 @@
 import {Line} from 'react-chartjs-2';
-import useFilters from '../../../context/FilterContext';
+import {useFilters} from '../../../context';
 import {getBlackFridayStats} from '../../../api';
 import {useQuery} from '@tanstack/react-query';
 import type {YearStat} from '../../../types';

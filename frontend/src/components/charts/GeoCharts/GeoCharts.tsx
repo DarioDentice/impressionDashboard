@@ -1,5 +1,5 @@
 import {Bar} from 'react-chartjs-2';
-import useFilters from '../../../context/FilterContext';
+import {useFilters} from '../../../context';
 import {getStateStats} from '../../../api';
 import {useQuery} from '@tanstack/react-query';
 import type {StateStat} from '../../../types';
