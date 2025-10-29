@@ -12,6 +12,16 @@ import type {
     KpiData,
     SortKeys
 } from '../types.d.ts';
+import {
+    countryQuerySchema,
+    kpiResponseSchema,
+    deviceStatResponseSchema,
+    hourStatResponseSchema,
+    monthStatResponseSchema,
+    stateStatResponseSchema,
+    yearStatResponseSchema,
+    dowStatResponseSchema,
+} from './apiSchema'
 
 interface RouteOptions {
     allImpressions: Impression[];
@@ -41,6 +51,7 @@ function filterImpressions(
     return dataToFilter;
 }
 
+
 const apiRoutes: FastifyPluginAsync<RouteOptions> = async (fastify, options) => {
 
     const allImpressions = options.allImpressions;
@@ -56,49 +67,71 @@ const apiRoutes: FastifyPluginAsync<RouteOptions> = async (fastify, options) => 
         done();
     });
 
-    fastify.get<{ Querystring: RawDataQuery }>('/api/impressions',
-        async (request) => {
-            const { country, page, limit, sortBy, sortOrder } = request.query;
+    fastify.get<{ Querystring: RawDataQuery }>('/api/impressions', {
+        schema: {
+            summary: 'Raw Impressions Data',
+            description: 'Return all data',
+            tags: ['Data'],
+            querystring: {
+                type: 'object',
+                properties: {
+                    country: {type: 'string', enum: ['all', 'usa', 'no-usa', 'not-found']},
+                    page: {type: 'string', default: '1'},
+                    limit: {type: 'string', default: '10'},
+                    sortBy: {type: 'string', enum: ['device_id', 'timestamp', 'country', 'state']},
+                    sortOrder: {type: 'string', enum: ['asc', 'desc']}
+                },
+            },
+        }
+    }, async (request) => {
+        const {country, page, limit, sortBy, sortOrder} = request.query;
+        const pageNum = parseInt(page || '1', 10);
+        const limitNum = parseInt(limit || '100', 10);
 
-            const pageNum = parseInt(page || '1', 10);
-            const limitNum = parseInt(limit || '100', 10);
+        const filteredData = filterImpressions(allImpressions, country, true);
 
-            const filteredData = filterImpressions(allImpressions, country, true);
+        if (sortBy && sortOrder) {
+            const key = sortBy as SortKeys;
 
-            if (sortBy && sortOrder) {
-                const key = sortBy as SortKeys;
+            filteredData.sort((elemA, elemB) => {
+                const impressionA = elemA[key];
+                const impressionB = elemB[key];
+                if (impressionA === null) return 1;
+                if (impressionB === null) return -1;
+                let compare = 0;
+                if (typeof impressionA === 'number' && typeof impressionB === 'number') {
+                    compare = impressionA - impressionB;
+                } else if (typeof impressionA === 'string' && typeof impressionB === 'string') {
+                    compare = impressionA.localeCompare(impressionB);
+                }
+                return sortOrder === 'asc' ? compare : -compare;
+            });
+        }
 
-                filteredData.sort((elemA, elemB) => {
-                    const impressionA = elemA[key];
-                    const impressionB = elemB[key];
-                    if (impressionA === null) return 1;
-                    if (impressionB === null) return -1;
-                    let compare = 0;
-                    if (typeof impressionA === 'number' && typeof impressionB === 'number') {
-                        compare = impressionA - impressionB;
-                    } else if (typeof impressionA === 'string' && typeof impressionB === 'string') {
-                        compare = impressionA.localeCompare(impressionB);
-                    }
-                    return sortOrder === 'asc' ? compare : -compare;
-                });
-            }
+        const startIndex = (pageNum - 1) * limitNum;
+        const endIndex = pageNum * limitNum;
+        const results = filteredData.slice(startIndex, endIndex);
 
-            const startIndex = (pageNum - 1) * limitNum;
-            const endIndex = pageNum * limitNum;
-            const results = filteredData.slice(startIndex, endIndex);
-
-            return {
-                totalItems: filteredData.length,
-                totalPages: Math.ceil(filteredData.length / limitNum),
-                currentPage: pageNum,
-                data: results,
-            };
-        });
+        return {
+            totalItems: filteredData.length,
+            totalPages: Math.ceil(filteredData.length / limitNum),
+            currentPage: pageNum,
+            data: results,
+        };
+    });
 
 
     // How many impressions are coming from each device?
     fastify.get<{ Querystring: StatQuery; Reply: DeviceStat[] }>(
-        '/api/stats/by-device',
+        '/api/stats/by-device', {
+            schema: {
+                summary: 'ByDevice',
+                description: 'Return impressions by device',
+                tags: ['device'],
+                querystring: countryQuerySchema,
+                response: deviceStatResponseSchema
+            }
+        },
         async (request) => {
             const {country} = request.query;
             const stats = new Map<string, number>();
@@ -116,7 +149,15 @@ const apiRoutes: FastifyPluginAsync<RouteOptions> = async (fastify, options) => 
     );
 
     //How many impressions for each hour of the day?
-    fastify.get<{ Querystring: StatQuery; Reply: HourStat[] }>('/api/stats/by-hour', async (request) => {
+    fastify.get<{ Querystring: StatQuery; Reply: HourStat[] }>('/api/stats/by-hour', {
+        schema: {
+            summary: 'ByHour',
+            description: 'Return impressions by Hour',
+            tags: ['hour'],
+            querystring: countryQuerySchema,
+            response: hourStatResponseSchema
+        }
+    }, async (request) => {
         const hourlyStats: number[] = Array(24).fill(0);
         const {country} = request.query;
         const dataToProcess = filterImpressions(allImpressions, country, true);
@@ -133,6 +174,15 @@ const apiRoutes: FastifyPluginAsync<RouteOptions> = async (fastify, options) => 
     //How many impressions for each US state?
     fastify.get<{ Querystring: StatQuery; Reply: StateStat[] }>(
         '/api/stats/by-state',
+        {
+            schema: {
+                summary: 'byState',
+                description: 'Return impressions by State',
+                tags: ['state'],
+                querystring: countryQuerySchema,
+                response: stateStatResponseSchema
+            }
+        },
         async (request) => {
             const stats = new Map<string, number>();
             const {country} = request.query;
@@ -149,9 +199,17 @@ const apiRoutes: FastifyPluginAsync<RouteOptions> = async (fastify, options) => 
         }
     );
 
-    //Black friday impression rate through the years
+    //Blackfriday impression rate through the years
     fastify.get<{ Querystring: StatQuery; Reply: YearStat[] }>(
-        '/api/stats/black-friday',
+        '/api/stats/black-friday', {
+            schema: {
+                summary: 'blackFriday',
+                description: 'Return impressions by year during the blackFriday',
+                tags: ['blackFriday'],
+                querystring: countryQuerySchema,
+                response: yearStatResponseSchema
+            }
+        },
         async (request) => {
             const stats = new Map<number, number>();
             const {country} = request.query;
@@ -176,40 +234,66 @@ const apiRoutes: FastifyPluginAsync<RouteOptions> = async (fastify, options) => 
         }
     );
 
-    fastify.get<{ Querystring: StatQuery, Reply: any[] }>('/api/stats/by-dow', async (request) => {
+    fastify.get<{ Querystring: StatQuery, Reply: any[] }>('/api/stats/by-dow',
+        {
+            schema: {
+                summary: 'Day of Week impressions',
+                description: 'Return impressions by day of Week',
+                tags: ['hour'],
+                querystring: countryQuerySchema,
+                response: dowStatResponseSchema
+            }
+        }, async (request) => {
 
-        const dataToProcess = filterImpressions(allImpressions, request.query.country, false);
+            const dataToProcess = filterImpressions(allImpressions, request.query.country, false);
 
-        const dowStats = Array(7).fill(0);
+            const dowStats = Array(7).fill(0);
 
-        dataToProcess.forEach(imp => {
-            const dow = new Date(imp.timestamp).getUTCDay();
-            dowStats[dow]++;
+            dataToProcess.forEach(imp => {
+                const dow = new Date(imp.timestamp).getUTCDay();
+                dowStats[dow]++;
+            });
+
+            return dowStats.map((impressions, day) => ({day, impressions}));
         });
 
-        return dowStats.map((impressions, day) => ({day, impressions}));
-    });
+    fastify.get<{ Querystring: StatQuery, Reply: any[] }>('/api/stats/by-month',
+        {
+            schema: {
+                summary: 'Month impressions',
+                description: 'Return impressions by month',
+                tags: ['hour'],
+                querystring: countryQuerySchema,
+                response: monthStatResponseSchema
+            }
+        }, async (request) => {
+            const dataToProcess = filterImpressions(allImpressions, request.query.country, false);
 
-    fastify.get<{ Querystring: StatQuery, Reply: any[] }>('/api/stats/by-month', async (request) => {
-        const dataToProcess = filterImpressions(allImpressions, request.query.country, false);
+            const monthStats = Array(12).fill(0);
 
-        const monthStats = Array(12).fill(0);
+            dataToProcess.forEach(imp => {
+                const month = new Date(imp.timestamp).getUTCMonth();
+                monthStats[month]++;
+            });
 
-        dataToProcess.forEach(imp => {
-            const month = new Date(imp.timestamp).getUTCMonth();
-            monthStats[month]++;
+            return monthStats.map((impressions, month) => ({month, impressions}));
         });
-
-        return monthStats.map((impressions, month) => ({month, impressions}));
-    });
 
     // EXTRA - create a response with kpi stats
-    fastify.get<{ Querystring: StatQuery, Reply: KpiData }>('/api/stats/kpi', async (request) => {
+    fastify.get<{ Querystring: StatQuery, Reply: KpiData }>('/api/stats/kpi', {
+        schema: {
+            summary: 'KPI',
+            description: 'Return Principal KPI',
+            tags: ['KPI'],
+            querystring: countryQuerySchema,
+            response: kpiResponseSchema
+        }
+    }, async (request) => {
 
         const cleanData = filterImpressions(allImpressions, request.query.country, false);
 
         if (cleanData.length === 0) {
-            return { totalImpressions: 0, dailyChangePercent: 0, weeklyChangePercent: 0, topDevice: null };
+            return {totalImpressions: 0, dailyChangePercent: 0, weeklyChangePercent: 0, topDevice: null};
         }
 
         const now = new Date();
@@ -247,7 +331,7 @@ const apiRoutes: FastifyPluginAsync<RouteOptions> = async (fastify, options) => 
             totalImpressions: cleanData.length,
             dailyChangePercent: dailyChange,
             weeklyChangePercent: weeklyChange,
-            topDevice: topDeviceEntry ? { id: topDeviceEntry[0], impressions: topDeviceEntry[1] } : null
+            topDevice: topDeviceEntry ? {id: topDeviceEntry[0], impressions: topDeviceEntry[1]} : null
         };
     });
 

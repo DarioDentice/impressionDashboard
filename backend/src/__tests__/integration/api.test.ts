@@ -44,6 +44,7 @@ describe('GET /api/impressions (Raw Data & Debug)', () => {
 
     it('should return 2 NOT-FOUND items', async () => {
         const response = await api.get('/api/impressions?country=not-found').expect(200);
+        console.log(response.body.data)
         expect(response.body.totalItems).toBe(2);
         expect(response.body.data.every((d: any) => d.country === 'not-found')).toBe(true);
     });

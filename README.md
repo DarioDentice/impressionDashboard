@@ -45,6 +45,17 @@ A differenza di un approccio tradizionale con database, questo backend adotta un
 
 -----
 
+### Documentazione API (Swagger/OpenAPI)
+
+Per facilitare l'esplorazione e il test delle API, è stata integrata la documentazione interattiva **Swagger UI**.
+
+Una volta avviato il backend:
+
+1.  Apri il browser e vai a: `http://localhost:3001/docimpression`
+2.  Vedrai una pagina web che elenca tutti gli endpoint disponibili.
+3.  Puoi espandere ogni endpoint per vedere i parametri richiesti (`country`, `sortBy`, `page`, ecc.), gli schemi di risposta attesi e 
+4.  Puoi anche **eseguire richieste di prova** direttamente dal browser cliccando su "Try it out" -> "Execute".
+
 ## Frontend
 
 Il frontend è un'applicazione React (creata con Vite) focalizzata sulla **qualità del codice**, la **manutenibilità** e un'architettura **component-based**.

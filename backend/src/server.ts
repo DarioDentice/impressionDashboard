@@ -5,6 +5,8 @@ import type {
     Impression
 } from './types.d.ts';
 import apiRoutes from './routes/apiRoutes.ts';
+import fastifySwagger from '@fastify/swagger';
+import fastifySwaggerUI from '@fastify/swagger-ui';
 
 const PORT = 3001;
 
@@ -12,6 +14,26 @@ const PORT = 3001;
 function createServer(loadedData: Impression[]): FastifyInstance {
     const server = Fastify({logger: false});
     server.register(fastifyCors, {origin: '*'});
+
+    server.register(fastifySwagger, {
+        openapi: {
+            info: {
+                title: 'Impressions API',
+                description: 'Analitycs API for Impressions dataSet',
+                version: '1.0.0'
+            },
+        }
+    });
+
+    server.register(fastifySwaggerUI, {
+        routePrefix: '/docimpression',
+        uiConfig: {
+            docExpansion: 'list',
+            deepLinking: false
+        },
+    });
+
+
     server.register(apiRoutes, {
         allImpressions: loadedData
     });
@@ -28,6 +50,7 @@ export async function startServer(): Promise<FastifyInstance> {
             console.log('[Server Start]');
             await server.listen({port: PORT, host: '0.0.0.0'});
             console.log(`Fastify server running on http://localhost:${PORT}`);
+            console.log(`Fastify documentation run on http://localhost:${PORT}/docimpression`);
         } else {
             console.log('[Server Test Start]');
             await server.ready();

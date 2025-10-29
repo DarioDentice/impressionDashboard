@@ -47,7 +47,7 @@ export const StyledTable = styled.table`
         &.asc .sort-arrow.asc,
         &.desc .sort-arrow.desc {
             opacity: 1;
-            color: #1890ff; /* Blu */
+            color: #1890ff;
         }
     }
 `;

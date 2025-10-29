@@ -1,4 +1,4 @@
-export type CountryFilter = 'all' | 'usa' | 'no-usa';
+export type CountryFilter = 'all' | 'usa' | 'no-usa' |'not-found';
 
 export interface StatQuery {
     country?: CountryFilter;
