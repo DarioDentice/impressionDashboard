@@ -170,65 +170,18 @@ export const mockByMonth = [
 ];
 
 export const mockOverview =
-    [
-        {
-            totalImpressions: 11,
-            dailyChangePercent: 36.36,
-            weeklyChangePercent: 0.0,
-            topDevice: {id: 'a1', impressions: 4},
-        },
-        {
-            totalImpressions: 11,
-            dailyChangePercent: 36.36,
-            weeklyChangePercent: 0.0,
-            topDevice: {id: 'a1', impressions: 4},
-        },
-        {
-            totalImpressions: 11,
-            dailyChangePercent: 36.36,
-            weeklyChangePercent: 0.0,
-            topDevice: {id: 'a1', impressions: 4},
-        },
-        {
-            totalImpressions: 11,
-            dailyChangePercent: 36.36,
-            weeklyChangePercent: 0.0,
-            topDevice: {id: 'a1', impressions: 4},
-        },
-        {
-            totalImpressions: 11,
-            dailyChangePercent: 36.36,
-            weeklyChangePercent: 0.0,
-            topDevice: {id: 'a1', impressions: 4},
-        },
-        {
-            totalImpressions: 11,
-            dailyChangePercent: 36.36,
-            weeklyChangePercent: 0.0,
-            topDevice: {id: 'a1', impressions: 4},
-        },
-        {
-            totalImpressions: 11,
-            dailyChangePercent: 36.36,
-            weeklyChangePercent: 0.0,
-            topDevice: {id: 'a1', impressions: 4},
-        },
-        {
-            totalImpressions: 11,
-            dailyChangePercent: 36.36,
-            weeklyChangePercent: 0.0,
-            topDevice: {id: 'a1', impressions: 4},
-        },
-        {
-            totalImpressions: 11,
-            dailyChangePercent: 36.36,
-            weeklyChangePercent: 0.0,
-            topDevice: {id: 'a1', impressions: 4},
-        },
-        {
-            totalImpressions: 11,
-            dailyChangePercent: 36.36,
-            weeklyChangePercent: 0.0,
-            topDevice: {id: 'a1', impressions: 4},
-        },
-    ];
+    {
+        totalImpressions: 1850,
+        yearlyTrends: [
+            { year: 2010, impressions: 50, changePercent: null },
+            { year: 2011, impressions: 65, changePercent: 30.0 },
+            { year: 2012, impressions: 60, changePercent: -7.7 },
+            { year: 2013, impressions: 80, changePercent: 33.3 },
+            { year: 2014, impressions: 110, changePercent: 37.5 },
+            { year: 2015, impressions: 150, changePercent: 36.4 },
+            { year: 2016, impressions: 200, changePercent: 33.3 },
+            { year: 2017, impressions: 320, changePercent: 60.0 },
+            { year: 2018, impressions: 815, changePercent: 154.7 }
+        ],
+        topDevice: { id: 'a1', impressions: 4 }
+    };

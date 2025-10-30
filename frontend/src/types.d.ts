@@ -41,10 +41,14 @@ export interface YearStat {
     year: number;
     impressions: number;
 }
+export interface YearlyTrend {
+    year: number;
+    impressions: number;
+    changePercent: number | null;
+}
 
 export interface KpiData {
     totalImpressions: number;
-    dailyChangePercent: number | null;
-    weeklyChangePercent: number | null;
+    yearlyTrends: YearlyTrend[];
     topDevice: { id: string; impressions: number } | null;
 }

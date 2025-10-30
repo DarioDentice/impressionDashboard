@@ -9,6 +9,7 @@ import type {
     StateStat,
     StatQuery,
     YearStat,
+    YearlyTrend,
     KpiData,
     SortKeys
 } from '../types.d.ts';
@@ -280,60 +281,78 @@ const apiRoutes: FastifyPluginAsync<RouteOptions> = async (fastify, options) => 
         });
 
     // EXTRA - create a response with kpi stats
-    fastify.get<{ Querystring: StatQuery, Reply: KpiData }>('/api/stats/kpi', {
-        schema: {
-            summary: 'KPI',
-            description: 'Return Principal KPI',
-            tags: ['KPI'],
-            querystring: countryQuerySchema,
-            response: kpiResponseSchema
-        }
-    }, async (request) => {
-
-        const cleanData = filterImpressions(allImpressions, request.query.country, false);
-
-        if (cleanData.length === 0) {
-            return {totalImpressions: 0, dailyChangePercent: 0, weeklyChangePercent: 0, topDevice: null};
-        }
-
-        const now = new Date();
-        const todayStart = new Date(now.setHours(0, 0, 0, 0));
-        const yesterdayStart = new Date(new Date().setDate(todayStart.getDate() - 1));
-        const lastMonthStart = new Date(new Date().setDate(todayStart.getDate() - 6));
-        const prev2MonthStart = new Date(new Date().setDate(todayStart.getDate() - 13));
-
-        const impressionsToday = cleanData.filter(imp => imp.timestamp >= todayStart.getTime()).length;
-        const impressionsYesterday = cleanData.filter(imp => imp.timestamp >= yesterdayStart.getTime() && imp.timestamp < todayStart.getTime()).length;
-
-        const impressionsLast7Days = cleanData.filter(imp => imp.timestamp >= lastMonthStart.getTime()).length;
-        const impressionsPrev7Days = cleanData.filter(imp => imp.timestamp >= prev2MonthStart.getTime() && imp.timestamp < lastMonthStart.getTime()).length;
-
-        const calcPercent = (current: number, previous: number): number | null => {
-            if (previous === 0) {
-                return (current > 0 ? 100.0 : 0.0);
+    fastify.get<{ Querystring: StatQuery, Reply: KpiData }>(
+        '/api/stats/kpi',
+        {
+            schema: {
+                summary: 'KPI Overview with Yearly Trends',
+                description: 'Returns key KPIs including year-over-year trends (2010-2018).',
+                tags: ['KPI'],
+                querystring: countryQuerySchema,
+                response: kpiResponseSchema
             }
-            if (current === 0 && previous === 0) return 0.0;
-            return ((current - previous) / previous) * 100;
-        };
-        const dailyChange = calcPercent(impressionsToday, impressionsYesterday);
-        const weeklyChange = calcPercent(impressionsLast7Days, impressionsPrev7Days);
-        const deviceMap = new Map<string, number>();
-        cleanData.forEach(imp => {
-            deviceMap.set(imp.device_id, (deviceMap.get(imp.device_id) || 0) + 1);
-        });
+        },
+        async (request) => {
+            const cleanData = filterImpressions(allImpressions, request.query.country, false);
 
-        let topDeviceEntry = null;
-        if (deviceMap.size > 0) {
-            topDeviceEntry = [...deviceMap.entries()].reduce(
-                (a, b) => b[1] > a[1] ? b : a);
+            if (cleanData.length === 0) {
+                return { totalImpressions: 0, yearlyTrends: [], topDevice: null };
+            }
+
+            const impressionsByYear: { [year: number]: number } = {};
+            const years = Array.from({ length: 9 }, (_, i) => 2010 + i); // 2010 to 2018
+
+            years.forEach(year => impressionsByYear[year] = 0); // Initialize
+
+            cleanData.forEach(imp => {
+                const year = new Date(imp.timestamp).getFullYear();
+                if (impressionsByYear.hasOwnProperty(year)) {
+                    impressionsByYear[year]++;
+                }
+            });
+
+            const yearlyTrends: YearlyTrend[] = [];
+            const calcPercent = (current: number, previous: number): number | null => {
+                if (previous === 0) return (current > 0 ? 100.0 : 0.0);
+                if (current === 0 && previous === 0) return 0.0;
+                return ((current - previous) / previous) * 100;
+            };
+
+            for (let i = 0; i < years.length; i++) {
+                const currentYear = years[i];
+                const currentImpressions = impressionsByYear[currentYear];
+                let changePercent: number | null = null;
+
+                if (i > 0) {
+                    const previousYear = years[i - 1];
+                    const previousImpressions = impressionsByYear[previousYear];
+                    changePercent = calcPercent(currentImpressions, previousImpressions);
+                }
+
+                yearlyTrends.push({
+                    year: currentYear,
+                    impressions: currentImpressions,
+                    changePercent: changePercent !== null ? parseFloat(changePercent.toFixed(1)) : null
+                });
+            }
+
+            const deviceMap = new Map<string, number>();
+            cleanData.forEach(imp => {
+                deviceMap.set(imp.device_id, (deviceMap.get(imp.device_id) || 0) + 1);
+            });
+            let topDeviceEntry = null;
+            if (deviceMap.size > 0) {
+                topDeviceEntry = [...deviceMap.entries()].reduce(
+                    (a, b) => b[1] > a[1] ? b : a);
+            }
+            console.log(yearlyTrends);
+            return {
+                totalImpressions: cleanData.length,
+                yearlyTrends: yearlyTrends,
+                topDevice: topDeviceEntry ? { id: topDeviceEntry[0], impressions: topDeviceEntry[1] } : null
+            };
         }
-        return {
-            totalImpressions: cleanData.length,
-            dailyChangePercent: dailyChange,
-            weeklyChangePercent: weeklyChange,
-            topDevice: topDeviceEntry ? {id: topDeviceEntry[0], impressions: topDeviceEntry[1]} : null
-        };
-    });
+    );
 
 };
 

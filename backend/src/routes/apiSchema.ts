@@ -117,14 +117,25 @@ const yearStatResponseSchema = {
     }
 };
 
+const yearlyTrendSchema = {
+    type: 'object',
+    properties: {
+        year: { type: 'number' },
+        impressions: { type: 'number' },
+        changePercent: { type: ['number', 'null'], description: '% change from previous year' }
+    }
+};
+
 const kpiResponseSchema = {
     200: {
-        description: 'Dati KPI aggregati',
+        description: 'Aggregated KPI data including yearly trends',
         type: 'object',
         properties: {
-            totalImpressions: {type: 'number'},
-            dailyChangePercent: {type: ['number', 'null']},
-            weeklyChangePercent: {type: ['number', 'null']},
+            totalImpressions: { type: 'number' },
+            yearlyTrends: {
+                type: 'array',
+                items: yearlyTrendSchema
+            },
             topDevice: {
                 type: ['object', 'null'],
                 properties: {
@@ -152,6 +163,8 @@ const paginatedImpressionsResponseSchema = {
         required: ['totalItems', 'totalPages', 'currentPage', 'data']
     }
 };
+
+
 
 export {
     deviceStatResponseSchema,

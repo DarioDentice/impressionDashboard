@@ -24,13 +24,8 @@ const KpiCards: FC = () => {
 
     if (isError) return <KpiCard>KPI Loading Error.</KpiCard>;
 
-    const formatPercent = (val: number | null | undefined): number => {
-        if (val == null) return 0;
-        return parseFloat(val.toFixed(1));
-    };
-
-    const dailyChange = formatPercent(data?.dailyChangePercent);
-    const weeklyChange = formatPercent(data?.weeklyChangePercent);
+    const latestTrend = data?.yearlyTrends.find(trend => trend.year === 2018);
+    const latestYearChange = latestTrend?.changePercent ?? 0;
 
     return (
         <KpiGrid>
@@ -40,18 +35,19 @@ const KpiCards: FC = () => {
             </KpiCard>
 
             <KpiCard>
-                <KpiTitle>Daily Change</KpiTitle>
+                <KpiTitle>Impressions ({latestTrend?.year || 'N/A'})</KpiTitle>
                 <KpiValue>
-                    {dailyChange}%
-                    <KpiPercent $isPositive={dailyChange >= 0}>{Math.abs(dailyChange)}%</KpiPercent>
+                    {latestTrend?.impressions.toLocaleString() || 0}
                 </KpiValue>
             </KpiCard>
 
             <KpiCard>
-                <KpiTitle>Weekly Change</KpiTitle>
+                <KpiTitle>YoY Change ({latestTrend?.year || 'N/A'} vs Prev)</KpiTitle>
                 <KpiValue>
-                    {weeklyChange}%
-                    <KpiPercent $isPositive={weeklyChange >= 0}>{Math.abs(weeklyChange)}%</KpiPercent>
+                    {latestYearChange.toFixed(1)}%
+                    <KpiPercent $isPositive={latestYearChange >= 0}>
+                        {Math.abs(latestYearChange).toFixed(1)}%
+                    </KpiPercent>
                 </KpiValue>
             </KpiCard>
 
